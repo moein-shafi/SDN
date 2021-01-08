@@ -1,0 +1,5 @@
+[
+    {"port1": 3, "port2": 2, "weight": 3},
+    {"port1": 3, "port2": 4, "weight": 4},
+    {"port1": 1, "port2": 3, "weight": 5}
+]
