@@ -8,10 +8,6 @@ class NodeToNode:
         self.this_node = this_node
         self.other_nodes_time = defaultdict(list)
 
-    def add_new_node(self, node_id, time):
-        self.other_nodes_time[node_id].append(time)
-
-
 
 def read_csv(file_name):
     result = []
@@ -37,7 +33,7 @@ def create_2nd_chart(x_axis: list, y_axis: list, chart_label: str,
     plt.title(title)
         
 def draw_switch_update_time_diagram():
-    switch_update_time_list = read_csv("switch_flow_table_update_times.txt")
+    switch_update_time_list = read_csv("results/switch_flow_table_update_times.txt")
     switch_update_time_dict = defaultdict(list)
     for row in switch_update_time_list:
         switch_update_time_dict[int(row[0])].append(float(row[1]))
@@ -49,7 +45,7 @@ def draw_switch_update_time_diagram():
     plt.show()
 
 def draw_node_to_node_delivery_time():
-    node_to_node_time_list = read_csv("node-to-node.txt")
+    node_to_node_time_list = read_csv("./results/node-to-node.txt")
     node_to_node_time_dict = defaultdict(NodeToNode)
 
     for row in node_to_node_time_list:

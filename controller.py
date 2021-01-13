@@ -102,7 +102,7 @@ class MyController(app_manager.RyuApp):
         os.system("rm -rf results")
         os.mkdir("results")
         self.startTime = time.time()
-        self.switchesFile = open("results/switchUpdatedTime.txt", "w+")
+        self.switchesFile = open("results/switch_flow_table_update_times.txt", "w+")
         self.dijkstraPathsFile = open("results/dijkstraPaths.txt", "w+")
         self.node_to_node_file = open("results/node-to-node.txt", "w")
 
