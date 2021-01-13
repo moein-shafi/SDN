@@ -104,6 +104,7 @@ class MyController(app_manager.RyuApp):
         self.startTime = time.time()
         self.switchesFile = open("results/switchUpdatedTime.txt", "w+")
         self.dijkstraPathsFile = open("results/dijkstraPaths.txt", "w+")
+        self.node_to_node_file = open("results/node-to-node.txt", "w")
 
     #This function adds a flow to a switch so the switch will know the path and will not ask the controller again
     def install_path(self, datapath, in_port, dst, src, actions):
@@ -178,7 +179,12 @@ class MyController(app_manager.RyuApp):
                             for link in linksList:
                                 if((int(path[i]) == link.src.dpid) and (int(path[i+1]) == link.dst.dpid)):
                                     outPort = link.src.port_no
-                print("Packet recieved on switch sw{} on port {} with source h{} and destination h{} and the shortest path is {} and the output port determined is {}".format(dpid, msg.in_port, ss[0], dd[0], p, outPort))
+                message = "Packet recieved on switch s{switch} on port {in_port} with source h{source} "
+                message += "and destination h{dest} and the shortest path is {path} and the output "
+                message += "port determined is {out_port}"
+                print(message.format(switch=dpid, in_port=msg.in_port, source=ss[0], dest=dd[0], path=p, out_port=outPort))
+                self.node_to_node_file.write("h{source},h{dest},{t},{path}\n".format(source=ss[0], dest=dd[0],
+                    t=str(time.time() - self.startTime), path=p))
         #The action should be done on the switch whitch containes the output port of the packet
         actions = [datapath.ofproto_parser.OFPActionOutput(outPort)]
         if outPort != ofproto.OFPP_FLOOD:
