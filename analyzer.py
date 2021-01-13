@@ -77,6 +77,6 @@ def draw_send_packets():
 
 
 if __name__ == '__main__':
-    # draw_switch_update_time_diagram()
-    # draw_node_to_node_delivery_time()
+    draw_switch_update_time_diagram()
+    draw_node_to_node_delivery_time()
     draw_send_packets()
