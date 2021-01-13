@@ -76,6 +76,7 @@ class MyNetworkHandler(object):
         self.net = net
         self.threads_list = []
         self.time_unit = 0.1
+        self.send_packet_file =  open("results/send_packets.txt", "w+")
 
 
     def handle(self):
@@ -101,8 +102,14 @@ class MyNetworkHandler(object):
                 host = self.net.get(myhost)
                 dest_host = random.choice(list(set(self.myhosts) - set(myhost)))
                 dest_ip = self.net.get(dest_host).IP()
+                start_time = time.time()
                 command = 'hping3 -c 1 -d 100000 {ip} &'.format(ip=dest_ip)
                 host.cmd(command)
+                end_time = time.time()
+                self.send_packet_file.write(host.IP().split(".")[-1] + "," + dest_host.replace('h', '') + "," +
+                        str(end_time - start_time) + "\n")
+                self.send_packet_file.flush()
+
             if i < 23:
                 time.sleep(2.5)
 
@@ -180,7 +187,7 @@ def main():
         print(50 * '=')
         topo = MyTopo(hosts, switches, links)
         net = Mininet(topo, controller=lambda name: RemoteController(name,
-                    ip= '127.0.0.1', protocol= 'tcp', port= 6640), autoSetMacs= True)
+                    ip= '127.0.0.1', protocol= 'tcp', port= 6635), autoSetMacs= True)
         myhandler = MyNetworkHandler(topo.myhosts, net)
         net.start()
         myhandler.handle()

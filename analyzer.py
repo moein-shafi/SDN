@@ -44,15 +44,20 @@ def draw_switch_update_time_diagram():
     plt.legend()
     plt.show()
 
-def draw_node_to_node_delivery_time():
-    node_to_node_time_list = read_csv("./results/node-to-node.txt")
+
+def read_node_to_node_times(file_name):
+    node_to_node_time_list = read_csv(file_name)
     node_to_node_time_dict = defaultdict(NodeToNode)
 
     for row in node_to_node_time_list:
         if row[0] not in node_to_node_time_dict.keys():
             node_to_node_time_dict[row[0]] = NodeToNode(row[0])
         node_to_node_time_dict[row[0]].other_nodes_time[row[1]].append(float(row[2]))
+    return node_to_node_time_dict
 
+
+def draw_node_to_node_delivery_time():
+    node_to_node_time_dict = read_node_to_node_times("./results/node-to-node.txt")
     for src, node_to_nodes in node_to_node_time_dict.items():
         for dst, times in node_to_nodes.other_nodes_time.items():
             create_2nd_chart(times, range(len(times)), dst,
@@ -60,8 +65,18 @@ def draw_node_to_node_delivery_time():
         plt.legend()
         plt.show()
 
+def draw_send_packets():
+    node_to_node_time_dict = read_node_to_node_times("./results/send_packets.txt")
+
+    for src, node_to_nodes in node_to_node_time_dict.items():
+        for dst, times in node_to_nodes.other_nodes_time.items():
+            create_2nd_chart(range(len(times)), times, dst,
+                        "Count", "Time", f"From src h{src}")
+        plt.legend()
+        plt.show()
 
 
 if __name__ == '__main__':
-    draw_switch_update_time_diagram()
-    draw_node_to_node_delivery_time()
+    # draw_switch_update_time_diagram()
+    # draw_node_to_node_delivery_time()
+    draw_send_packets()
